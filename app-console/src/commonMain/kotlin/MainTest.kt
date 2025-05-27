@@ -1,9 +1,9 @@
-import sh.bitsy.lib.kloggy.AnsiEscapeUtil
-import sh.bitsy.lib.kloggy.LogLevels
-import sh.bitsy.lib.kloggy.log
-import sh.bitsy.lib.kstacktrace.Stacktrace
-import sh.bitsy.test.Hello
-import sh.bitsy.test.secondShow
+import com.bitsycore.lib.kloggy.AnsiEscapeUtil
+import com.bitsycore.lib.kloggy.LogLevels
+import com.bitsycore.lib.kloggy.log
+import com.bitsycore.lib.kstacktrace.Stacktrace
+import com.bitsycore.test.Hello
+import com.bitsycore.test.secondShow
 
 @Suppress("NOTHING_TO_INLINE")
 fun logFrame() {

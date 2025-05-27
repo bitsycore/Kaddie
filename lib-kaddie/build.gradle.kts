@@ -11,7 +11,7 @@ plugins {
 val javaVersion: JavaVersion by rootProject.extra
 
 android {
-    namespace = "sh.bitsy.lib.kaddie"
+    namespace = "com.bitsycore.lib.kaddie"
     compileSdk = rootProject.extra["compileSdk"] as Int
 
     compileOptions {

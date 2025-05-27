@@ -1,7 +1,7 @@
-import sh.bitsy.lib.kaddie.get
-import sh.bitsy.lib.kaddie.getDependency
-import sh.bitsy.lib.kaddie.registerDependency
-import sh.bitsy.lib.kloggy.LogLevels
+import com.bitsycore.lib.kaddie.get
+import com.bitsycore.lib.kaddie.getDependency
+import com.bitsycore.lib.kaddie.registerDependency
+import com.bitsycore.lib.kloggy.LogLevels
 import kotlin.reflect.KClass
 
 class UserRepository {

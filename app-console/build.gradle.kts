@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "sh.bitsy.test"
+    namespace = "com.bitsycore.test"
     compileSdk = rootProject.extra["compileSdk"] as Int
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -45,8 +45,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.libKaddie)
-            implementation(projects.libKloggy)
-            implementation(projects.libKstacktrace)
         }
     }
 }
