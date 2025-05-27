@@ -31,20 +31,18 @@ kotlin {
     }
 
     listOf(
-        macosArm64(),
-        macosX64(),
+//        macosArm64(),
+//        macosX64(),
         mingwX64(),
         linuxX64(),
         linuxArm64()
     ).forEach {
         it.binaries.executable()
-        it.binaries.staticLib()
-        it.binaries.sharedLib()
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.libKaddie)
+            implementation("com.bitsycore:kaddie:1.0.1")
         }
     }
 }

@@ -43,7 +43,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(projects.libKaddie)
+    implementation(projects.kaddie)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

@@ -6,7 +6,11 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
+    id("maven-publish")
 }
+
+group = "com.bitsycore"
+version = "1.0.1"
 
 val javaVersion: JavaVersion by rootProject.extra
 
@@ -42,12 +46,12 @@ kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.fromTarget(javaVersion.toString())
         }
-
+        publishLibraryVariants("release")
     }
 
     // ===================================
     // Apple Native
-    val xcf = XCFramework("Kaddie")
+    val xcf = XCFramework("kaddie")
     listOf(
         macosArm64(),
         macosX64(),
@@ -56,7 +60,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "Kaddie"
+            baseName = "kaddie"
             isStatic = true
             xcf.add(this)
         }
@@ -89,6 +93,19 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(kotlin("reflect"))
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/bitsycore/Kaddie")
+            credentials {
+                username = "token"
+                password = ""
+            }
         }
     }
 }

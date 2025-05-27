@@ -12,14 +12,22 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/bitsycore/Kaddie")
+            credentials {
+                username = "token"
+                password = ""
+            }
+        }
     }
 }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "Kaddie"
+rootProject.name = "LibKaddie"
 
 include(":app-console")
 
-include(":lib-kaddie")
-include(":lib-kaddie-viewmodel")
+include(":kaddie")
+include(":kaddie-viewmodel")
