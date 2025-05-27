@@ -17,7 +17,8 @@ class JvmReflectionDependencyProvider : DependencyProvider {
 	}
 
 	private fun <T : Any> buildFromReflection(parentDependencies: DiContainer, klass: KClass<T>, extraParam: Array<out Any>) : T {
-		val constructor = klass.getConstructorForReflection() ?: throw error("Cannot find constructor for $klass")
+		klass.objectInstance?.let { return it }
+		val constructor = klass.getConstructorForReflection() ?: error("Cannot find constructor for class: $klass")
 
 		// Shortcut for empty constructor
 		if (constructor.parameters.isEmpty()) {
@@ -32,11 +33,10 @@ class JvmReflectionDependencyProvider : DependencyProvider {
 		val instance = if (!klass.isInner || constructor.haveOptionalParam) {
 			constructor.callBy(dependenciesMap)
 		} else {
-			// Java Inner Class doesn't include kotlin inner class parameter identifier
-			// but it is still required for a callBy ... so we need to use the constructor
-			// in java directly
-			constructor.javaConstructor?.newInstance(*dependenciesMap.values.toTypedArray()) ?:
-			throw error("Cannot create instance of class: $klass")
+			// FIXME Java Inner Class doesn't include kotlin inner class parameter identifier
+			// but it seem to still be required for a callBy ... So we need to use the constructor in java directly
+			constructor.javaConstructor?.newInstance(*dependenciesMap.values.toTypedArray())
+				?: error("Cannot create instance of class: $klass")
 		}
 
 		dependencies[klass] = instance
