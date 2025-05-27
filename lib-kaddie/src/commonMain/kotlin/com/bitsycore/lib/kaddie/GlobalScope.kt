@@ -6,12 +6,9 @@ import kotlin.reflect.KClass
 // MARK: DI CONTAINER
 // =================================
 
-internal val GLOBAL_CONTAINER = DIContainerImpl().also {
-    val providers = getDefaultDependencyProviders()
-    providers.forEach { provider -> it.registerDependencyProvider(provider) }
-}
+internal val GLOBAL_CONTAINER = MutableDiContainer()
 
-fun registerDependencyProvider(provider: DependencyProvider) = GLOBAL_CONTAINER.registerDependencyProvider(provider)
+fun addDependencyProvider(provider: DependencyProvider) = GLOBAL_CONTAINER.addProvider(provider)
 
 // =================================
 // MARK: REGISTER
@@ -24,7 +21,7 @@ inline fun <reified T : Any> registerDependency(instance: T) = registerDependenc
 /**
  * Register a dependency with an instance globally.
  */
-fun <T : Any> registerDependency(klass: KClass<T>, instance: T) = GLOBAL_CONTAINER.registerDependency(klass, instance)
+fun <T : Any> registerDependency(klass: KClass<T>, instance: T) = GLOBAL_CONTAINER.register(klass, instance)
 
 /**
  * Register a dependency with a constructor globally.
@@ -40,7 +37,7 @@ inline fun <reified T : Any> registerDependency(noinline factory: DependencyFact
  * Use get() in the constructor to retrieve a dependency.
  */
 fun <T : Any> registerDependency(klass: KClass<T>, factory: DependencyFactory<T>) =
-    GLOBAL_CONTAINER.registerDependency(klass, factory)
+    GLOBAL_CONTAINER.register(klass, factory)
 
 // =================================
 // MARK: GET
@@ -53,4 +50,4 @@ inline fun <reified T : Any> getDependency(vararg extraParam: Any = emptyArray()
 /**
  * Get a dependency stored globally.
  */
-fun <T : Any> getDependency(klass: KClass<T>, vararg extraParam: Any): T = GLOBAL_CONTAINER.getDependency<T>(klass, *extraParam)
+fun <T : Any> getDependency(klass: KClass<T>, vararg extraParam: Any): T = GLOBAL_CONTAINER.get(klass, *extraParam)

@@ -2,52 +2,57 @@ package com.bitsycore.lib.kaddie
 
 import kotlin.reflect.KClass
 
+fun MutableDiContainer() : MutableDiContainer = DiContainerImpl().also {
+    val providers = getDefaultDependencyProviders()
+    providers.forEach { provider -> it.addProvider(provider) }
+}
+
 interface DiContainer {
-    fun <T : Any> getDependency(klass: KClass<T>, vararg extraParam: Any = emptyArray()): T
-    fun <T : Any> hasRegisteredDependency(klass: KClass<T>): Boolean
-    fun getRegisteredDependenciesKeys(): Set<KClass<*>>
+    fun <T : Any> get(klass: KClass<T>, vararg extraParam: Any = emptyArray()): T
+    fun <T : Any> has(klass: KClass<T>): Boolean
+    fun getKeys(): Set<KClass<*>>
 }
 
-interface MutableDIContainer : DiContainer {
-    fun <T : Any> registerDependency(klass: KClass<T>, instance: T)
-    fun <T : Any> registerDependency(klass: KClass<T>, factory: DependencyFactory<T>)
-    fun clearRegisteredDependencies()
-    fun removeRegisteredDependency(klass: KClass<*>)
-    fun registerDependencyProvider(dependencyProvider: DependencyProvider)
-    fun removeDependencyProvider(dependencyProvider: DependencyProvider)
+interface MutableDiContainer : DiContainer {
+    fun <T : Any> register(klass: KClass<T>, instance: T)
+    fun <T : Any> register(klass: KClass<T>, factory: DependencyFactory<T>)
+    fun unregisterAll()
+    fun unregister(klass: KClass<*>)
+    fun addProvider(dependencyProvider: DependencyProvider)
+    fun removeProvider(dependencyProvider: DependencyProvider)
 }
 
-internal class DIContainerImpl : MutableDIContainer {
+internal class DiContainerImpl : MutableDiContainer {
     private val dependenciesList = mutableMapOf<KClass<*>, Holder<*>>()
     private val dependencyProviders = mutableListOf<DependencyProvider>()
 
-    override fun <T : Any> registerDependency(klass: KClass<T>, instance: T) {
+    override fun <T : Any> register(klass: KClass<T>, instance: T) {
         dependenciesList[klass] = InstanceHolder(instance)
     }
 
-    override fun <T : Any> registerDependency(klass: KClass<T>, factory: DependencyFactory<T>) {
+    override fun <T : Any> register(klass: KClass<T>, factory: DependencyFactory<T>) {
         dependenciesList[klass] = FactoryHolder(this, factory)
     }
 
-    override fun <T : Any> hasRegisteredDependency(klass: KClass<T>): Boolean = dependenciesList.containsKey(klass)
+    override fun <T : Any> has(klass: KClass<T>): Boolean = dependenciesList.containsKey(klass)
 
-    override fun getRegisteredDependenciesKeys(): Set<KClass<*>> = dependenciesList.keys
+    override fun getKeys(): Set<KClass<*>> = dependenciesList.keys
 
-    override fun clearRegisteredDependencies() = dependenciesList.clear()
+    override fun unregisterAll() = dependenciesList.clear()
 
-    override fun removeRegisteredDependency(klass: KClass<*>) {
+    override fun unregister(klass: KClass<*>) {
         dependenciesList.remove(klass)
     }
 
-    override fun registerDependencyProvider(dependencyProvider: DependencyProvider) {
+    override fun addProvider(dependencyProvider: DependencyProvider) {
         dependencyProviders.add(dependencyProvider)
     }
 
-    override fun removeDependencyProvider(dependencyProvider: DependencyProvider) {
+    override fun removeProvider(dependencyProvider: DependencyProvider) {
         dependencyProviders.remove(dependencyProvider)
     }
 
-    override fun <T : Any> getDependency(klass: KClass<T>, vararg extraParam: Any): T {
+    override fun <T : Any> get(klass: KClass<T>, vararg extraParam: Any): T {
         val dependency = dependenciesList[klass]
         if (dependency == null) {
             return getFromDependencyProvider(this, klass, extraParam)

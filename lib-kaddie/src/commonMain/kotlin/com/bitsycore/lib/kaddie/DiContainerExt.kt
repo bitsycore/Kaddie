@@ -1,11 +1,11 @@
 package com.bitsycore.lib.kaddie
 
-inline fun <reified T : Any> MutableDIContainer.registerDependency(instance: T) =
-    registerDependency(T::class, instance)
+inline fun <reified T : Any> MutableDiContainer.register(instance: T) =
+    register(T::class, instance)
 
-inline fun <reified T : Any> MutableDIContainer.registerDependency(noinline constructor: DependencyFactory<T>) =
-    registerDependency(T::class, constructor)
+inline fun <reified T : Any> MutableDiContainer.register(noinline constructor: DependencyFactory<T>) =
+    register(T::class, constructor)
 
-inline fun <reified T : Any> MutableDIContainer.removeRegisteredDependency() = removeRegisteredDependency(T::class)
+inline fun <reified T : Any> MutableDiContainer.unregister() = unregister(T::class)
 
-inline fun <reified T : Any> DiContainer.getDependency(vararg extraParam: Any): T = getDependency(T::class, extraParam)
+inline fun <reified T : Any> DiContainer.get(vararg extraParam: Any): T = get(T::class, extraParam)
