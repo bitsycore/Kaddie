@@ -31,7 +31,7 @@ object ObjectTest {
         object Test150 {
             class Test200 {
                 object Test300 {
-                    class Test400(hello: Test200, val test300: Test300 = Test300) {
+                    class Test400(hello: Test200, val test300: Test300) {
                         fun sayHello() {
                             println("Hello Test400! $this")
                         }
@@ -107,12 +107,11 @@ fun main() {
     testContainer.get<ObjectTest.Test50>().sayHello()
     testContainer.get<ObjectTest.Test100>().sayHello()
     testContainer.get<ObjectTest.Test100>().sayHello()
+    testContainer.get<ObjectTest.Test50.Test150.Test200.Test300.Test400>().sayHello()
 
     testContainer.get<NewUserRepository>().also {
         println("$it: UserID: " + it.findById(99))
     }
-
-    testContainer.get<ObjectTest.Test50.Test150.Test200.Test300.Test400>().sayHello()
 
     return
 }
